@@ -1,0 +1,37 @@
+name: Generate Documentation
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'notebooks/**'
+  pull_request:
+    types: [closed]
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          
+      - name: Install dependencies
+        run: |
+          pip install mkdocs mkdocs-material pymdown-extensions
+          pip install -r requirements.txt
+          
+      - name: Build docs
+        run: mkdocs build --site-dir site/
+        
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
