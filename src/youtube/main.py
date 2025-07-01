@@ -1,12 +1,7 @@
-from fastapi import FastAPI, Query
-from typing import List
 import requests
-import pandas as pd
-
-app = FastAPI()
-# Usamos dotenv para traer la clave de API de YouTube
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 API_KEY = os.getenv("YOUTUBE_API_KEY")
 
@@ -36,7 +31,6 @@ def get_video_metadata(video_id):
     }
 
 def get_videos_metadata(video_ids):
-    # video_ids: lista de IDs (máx 50 por
     url = "https://www.googleapis.com/youtube/v3/videos"
     params = {
         "part": "snippet,statistics",
@@ -61,7 +55,7 @@ def get_videos_metadata(video_ids):
         })
     return metadata
 
-def get_comments(video_id, max_results=100):
+def get_comments(video_id, max_results=10000):
     url = "https://www.googleapis.com/youtube/v3/commentThreads"
     params = {
         "part": "snippet",
@@ -107,7 +101,6 @@ def get_video_ids_from_channel(channel_id, max_results=50):
     return video_ids
 
 def get_all_videos_metadata_from_channel(channel_id, total_max=200):
-    # Obtén todos los IDs de vídeos del canal (paginando si es necesario)
     video_ids = []
     url = "https://www.googleapis.com/youtube/v3/search"
     params = {
@@ -128,26 +121,9 @@ def get_all_videos_metadata_from_channel(channel_id, total_max=200):
             params["pageToken"] = data["nextPageToken"]
         else:
             break
-    video_ids = video_ids[:total_max]  # Por si hay más de los que pediste
-
-    # Ahora pide los metadatos en bloques de 50
+    video_ids = video_ids[:total_max]
     all_metadata = []
     for i in range(0, len(video_ids), 50):
         batch_ids = video_ids[i:i+50]
         all_metadata.extend(get_videos_metadata(batch_ids))
     return all_metadata
-
-@app.get("/fetch_comments/")
-def fetch_comments(video_ids: List[str] = Query(...), max_results: int = 100):
-    rows = []
-    for video_id in video_ids:
-        meta = get_video_metadata(video_id)
-        if not meta:
-            continue
-        comments = get_comments(video_id, max_results=max_results)
-        for c in comments:
-            row = {**meta, **c}
-            rows.append(row)
-    df = pd.DataFrame(rows)
-    df.to_csv("youtube_comments.csv", index=False)
-    return {"message": f"Guardados {len(rows)} comentarios en youtube_comments.csv"}
