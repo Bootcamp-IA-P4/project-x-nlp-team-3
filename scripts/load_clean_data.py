@@ -1,13 +1,14 @@
-import gzip
 import requests
-from io import BytesIO, StringIO
+from io import StringIO
 import pandas as pd
+from src.utils.csv_utils import read_csv, write_csv
+
 # URL to the cleaned comments data on GitHub
 GITHUB_CLEAN_URL = "https://raw.githubusercontent.com/Bootcamp-IA-P4/Bootcamp-IA-P4-project-x-nlp-team-3/feature/eda/Data/comments_data_clean.csv"
 
 def load_comments_data_from_github(url):
     """
-    Downloading and processing comments data from GitHub repository.
+    Download and return comments data from GitHub as a DataFrame.
     """
     print("🔗 Downloading data from GitHub...")
 
