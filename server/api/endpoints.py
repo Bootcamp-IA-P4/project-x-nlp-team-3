@@ -1,4 +1,3 @@
-# app/api/endpoints.py
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -7,11 +6,9 @@ import joblib
 
 router = APIRouter()
 
-# =====================
-# CARGA DEL MODELO NLP
-# =====================
+
 try:
-    model_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'model.pkl')
+    model_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'pipeline_multinomial_nb.pkl')
     model_path = os.path.abspath(model_path)  # Resuelve path relativo a absoluto
     clf = joblib.load(model_path)
     print(f"✅ Modelo NLP cargado exitosamente desde {model_path}")
@@ -20,9 +17,7 @@ except Exception as e:
     clf = None
 
 
-# ==========================
-# SCHEMA PARA EL ENDPOINT
-# ==========================
+
 class PredictionRequest(BaseModel):
     text: str
 
@@ -31,9 +26,7 @@ class PredictionResponse(BaseModel):
     input_text: str
 
 
-# ==========================
-# ENDPOINT DE PREDICCIÓN
-# ==========================
+
 @router.post("/predict", response_model=PredictionResponse)
 async def predict_toxicity(data: PredictionRequest):
     if clf is None:
@@ -53,9 +46,7 @@ async def predict_toxicity(data: PredictionRequest):
         raise HTTPException(status_code=500, detail=f"Prediction error: {e}")
 
 
-# ==========================
-# ENDPOINT DE PRUEBA
-# ==========================
+
 @router.get("/")
 def read_root():
     return {
