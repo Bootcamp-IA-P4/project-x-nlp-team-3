@@ -2,3 +2,4 @@ requests
 pandas
 numpy
 dotenv
+google-api-python-client
