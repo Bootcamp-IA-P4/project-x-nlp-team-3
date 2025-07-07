@@ -1,5 +1,13 @@
 requests
-pandas
-numpy
-dotenv
 google-api-python-client
+mlflow
+fastapi
+uvicorn
+supabase
+python-dotenv
+pydantic
+joblib
+scikit-learn
+numpy
+pandas
+sqlalchemy
