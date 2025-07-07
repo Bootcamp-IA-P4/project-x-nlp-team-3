@@ -9,8 +9,8 @@ def main():
     df = load_comments_data_from_github(GITHUB_CLEAN_URL)
     if df is not None:
         print("📄 Saving data to CSV file...")
-        write_csv(df, "comments_data_clean.csv")
-        print("✅ Datos guardados en comments_data_clean.csv")
+        write_csv(df, "data/processed/comments_data_clean.csv")
+        print("✅ Datos guardados en data/processed/comments_data_clean.csv")
     else:
         print("❌ No se pudieron descargar los datos.")
 

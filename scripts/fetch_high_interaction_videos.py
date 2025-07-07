@@ -13,7 +13,7 @@ API_KEY = os.getenv("YOUTUBE_API_KEY")  # Asegúrate de tener YOUTUBE_API_KEY en
 REGIONS = ["US", "GB", "AU", "CA", "IE", "NZ"]  # Puedes añadir más si lo deseas
 MIN_RATIO = 0.01  # 1% comentarios/views
 MAX_RESULTS = 50
-OUTPUT_CSV = "videos_metadata.csv"
+OUTPUT_CSV = "data/videos/videos_metadata.csv"
 
 logger = get_logger()
 

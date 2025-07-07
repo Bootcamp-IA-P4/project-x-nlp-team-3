@@ -9,7 +9,7 @@ import pandas as pd
 import requests
 
 logger = get_logger()
-PROCESSED_FILE = "processed_videos.csv"
+PROCESSED_FILE = "data/processed/processed_videos.csv"
 
 # def load_processed_videos(filepath):
 #     if not os.path.exists(filepath):
@@ -77,4 +77,8 @@ def fetch_comments_from_csv(metadata_csv, output_csv, processed_file):
     logger.info(f"Total de comentarios extraídos en esta ejecución: {total_comments}")
 
 if __name__ == "__main__":
-    fetch_comments_from_csv("videos_metadata.csv", "all_comments.csv", PROCESSED_FILE)
+    fetch_comments_from_csv(
+        "data/videos/videos_metadata.csv",
+        "data/comments/all_comments.csv",
+        PROCESSED_FILE
+    )
