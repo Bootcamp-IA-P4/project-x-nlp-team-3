@@ -1,0 +1,11 @@
+mlflow
+fastapi
+uvicorn
+supabase
+python-dotenv
+pydantic
+joblib
+scikit-learn
+numpy
+pandas
+sqlalchemy
