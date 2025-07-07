@@ -7,18 +7,23 @@ from server.database.save_comment import save_comment
 from server.database.db_connection import supabase
 from googleapiclient.discovery import build
 from urllib.parse import urlparse, parse_qs
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 router = APIRouter()
 
 
 try:
-    model_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'pipeline_multinomial_nb_new.pkl')
+    model_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'model_transformer.safetensors')
     model_path = os.path.abspath(model_path)  # Resuelve path relativo a absoluto
-    clf = joblib.load(model_path)
+    # clf = joblib.load(model_path)
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    model = AutoModelForSequenceClassification.from_pretrained(model_path)
     print(f"✅ Modelo NLP cargado exitosamente desde {model_path}")
 except Exception as e:
     print(f"❌ Error cargando modelo NLP: {e}")
     clf = None
+    tokenizer = None
+    model = None
 
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
