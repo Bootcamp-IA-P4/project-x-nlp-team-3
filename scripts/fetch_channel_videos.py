@@ -1,7 +1,7 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from youtube.api_client import get_all_videos_metadata_from_channel
+from src.youtube.api_client import get_all_videos_metadata_from_channel
 from src.utils.csv_utils import append_csv
 from src.utils.logger import get_logger
 import pandas as pd
