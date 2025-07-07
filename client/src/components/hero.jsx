@@ -31,14 +31,13 @@ function Hero() {
     setIsAnalyzed(false);
   };
 
-  const getToxicityLevel = (prediction) => {
-    // Asumiendo que tu API devuelve algo como { prediccion: "Tóxico" } o un score
-    if (typeof prediction === 'string') {
-      return prediction.toLowerCase().includes('tóxico') || prediction.toLowerCase().includes('toxic');
-    }
-    // Si es un objeto con score, ajusta según tu API
-    return prediction?.toxic || prediction?.prediccion === 'Tóxico';
-  };
+const getToxicityLevel = (prediction) => {
+  if (typeof prediction === 'object' && prediction !== null) {
+    // Si prediction es un objeto con campo label booleano
+    return prediction.label === true;
+  }
+  return false;
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center p-4">
