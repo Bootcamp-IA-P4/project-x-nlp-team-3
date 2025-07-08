@@ -1,208 +1,197 @@
-import React, { useState } from "react";
-import { evaluarComentario } from "../services/api";
+import React, { useState, useEffect } from 'react';
 
-function Hero() {
-  const [comentario, setComentario] = useState("");
-  const [resultado, setResultado] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isAnalyzed, setIsAnalyzed] = useState(false);
+const Hero = ({ onStartAnalysis }) => {
+  const [showAnimation, setShowAnimation] = useState(false);
 
-  const handleEvaluacion = async () => {
-    if (!comentario.trim()) {
-      alert("Por favor ingresa un comentario para evaluar.");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const res = await evaluarComentario(comentario);
-      setResultado(res);
-      setIsAnalyzed(true);
-    } catch (error) {
-      alert("Error al evaluar el comentario. Intenta de nuevo.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleNewAnalysis = () => {
-    setComentario("");
-    setResultado(null);
-    setIsAnalyzed(false);
-  };
-
-const getToxicityLevel = (prediction) => {
-  if (typeof prediction === 'object' && prediction !== null) {
-    // Si prediction es un objeto con campo label booleano
-    return prediction.label === true;
-  }
-  return false;
-};
+  useEffect(() => {
+    const timer = setTimeout(() => setShowAnimation(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500 rounded-2xl mb-6">
-            <svg className="w-8 h-8 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/>
-            </svg>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+      <div className={`max-w-4xl mx-auto px-6 py-16 transition-all duration-1000 ${showAnimation ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        {/* Logo y Título Principal */}
+        <div className="text-center mb-16">
+          <div className="flex justify-center mb-8">
+            <div className="w-24 h-24 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-2xl">
+              <span className="text-white font-bold text-4xl">+</span>
+            </div>
           </div>
-          <h1 className="text-4xl font-bold text-white mb-3">YouToxic</h1>
-          <p className="text-gray-300 text-lg">Advanced AI-Powered Comment Toxicity Detection</p>
-          <div className="flex items-center justify-center space-x-6 mt-4 text-sm text-gray-400">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span>Real-time Analysis</span>
+          <h1 className="text-7xl font-bold mb-6 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+            Ok.Hater
+          </h1>
+          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Detección Avanzada de Toxicidad en Comentarios con Inteligencia Artificial
+          </p>
+        </div>
+
+        {/* Características destacadas */}
+        <div className="flex justify-center flex-wrap gap-6 mb-16 text-sm">
+          <div className="flex items-center bg-gray-800/50 rounded-full px-4 py-2 backdrop-blur-sm">
+            <div className="w-3 h-3 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-gray-300">Análisis en Tiempo Real</span>
+          </div>
+          <div className="flex items-center bg-gray-800/50 rounded-full px-4 py-2 backdrop-blur-sm">
+            <div className="w-3 h-3 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-gray-300">99.5% Precisión</span>
+          </div>
+          <div className="flex items-center bg-gray-800/50 rounded-full px-4 py-2 backdrop-blur-sm">
+            <div className="w-3 h-3 bg-purple-500 rounded-full mr-2 animate-pulse"></div>
+            <span className="text-gray-300">Resultados Instantáneos</span>
+          </div>
+        </div>
+
+        {/* Área de entrada principal */}
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-10 mb-12 shadow-2xl border border-gray-700/50">
+          <h2 className="text-3xl font-semibold mb-8 text-center">
+            <span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+              🔍 Comienza tu análisis
+            </span>
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Análisis Individual */}
+            <div className="bg-gray-700/30 rounded-xl p-8 hover:bg-gray-700/40 transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl mx-auto mb-6 shadow-lg">
+                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-4 text-center">Analizar Comentario Individual</h3>
+              <p className="text-gray-400 mb-6 text-center leading-relaxed">
+                Ingresa un comentario específico para analizar su nivel de toxicidad
+              </p>
+              <button
+                onClick={() => onStartAnalysis('comentario')}
+                className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Comenzar Análisis
+              </button>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>99.5% Accuracy</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-              <span>Instant Results</span>
+
+            {/* Análisis de Video */}
+            <div className="bg-gray-700/30 rounded-xl p-8 hover:bg-gray-700/40 transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl mx-auto mb-6 shadow-lg">
+                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1a3 3 0 015.83 1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold mb-4 text-center">Analizar Video de YouTube</h3>
+              <p className="text-gray-400 mb-6 text-center leading-relaxed">
+                Analiza todos los comentarios de un video de YouTube ingresando su URL
+              </p>
+              <button
+                onClick={() => onStartAnalysis('video')}
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Analizar Video
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Main Card */}
-        <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 shadow-2xl">
-          {!isAnalyzed ? (
-            <>
-              {/* Input Section */}
-              <div className="mb-6">
-                <div className="flex items-center space-x-2 mb-4">
-                  <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                  <span className="text-amber-500 font-medium">Enter a comment to analyze</span>
-                </div>
-                <div className="relative">
-                  <textarea
-                    value={comentario}
-                    onChange={(e) => setComentario(e.target.value)}
-                    placeholder="Write your comment here..."
-                    className="w-full bg-slate-700/50 border border-slate-600 rounded-xl p-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none transition-all duration-200"
-                    rows="6"
-                    maxLength={500}
-                  />
-                  <div className="absolute bottom-3 right-3 text-xs text-gray-400">
-                    {comentario.length}/500
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">Press Ctrl+Enter to analyze quickly</p>
-              </div>
+        {/* Información adicional */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl mx-auto mb-6 flex items-center justify-center shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold mb-4 text-center">Análisis Preciso</h3>
+            <p className="text-gray-400 text-center leading-relaxed">
+              Utilizamos modelos de IA avanzados para detectar toxicidad con alta precisión
+            </p>
+          </div>
 
-              {/* Analyze Button */}
-              <button
-                onClick={handleEvaluacion}
-                disabled={isLoading || !comentario.trim()}
-                className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg"
-              >
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                    <span>Analyzing...</span>
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <span>Analyze Toxicity</span>
-                  </>
-                )}
-              </button>
-            </>
-          ) : (
-            <>
-              {/* Results Section */}
-              <div className="text-center mb-6">
-                <div className="flex items-center justify-center space-x-2 mb-4">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-green-400 font-medium">Analysis Complete</span>
-                </div>
-              </div>
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl mx-auto mb-6 flex items-center justify-center shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold mb-4 text-center">Súper Rápido</h3>
+            <p className="text-gray-400 text-center leading-relaxed">
+              Obtén resultados instantáneos sin demoras ni tiempos de espera largos
+            </p>
+          </div>
 
-              {/* Result Card */}
-              <div className={`border rounded-xl p-6 mb-6 ${
-                getToxicityLevel(resultado) 
-                  ? 'bg-red-900/20 border-red-500/50' 
-                  : 'bg-green-900/20 border-green-500/50'
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-white font-semibold text-lg">Result:</span>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    getToxicityLevel(resultado)
-                      ? 'bg-red-500 text-white'
-                      : 'bg-green-500 text-white'
-                  }`}>
-                    {getToxicityLevel(resultado) ? 'Toxic' : 'Safe'}
-                  </span>
-                </div>
-                
-                <div className="text-gray-300">
-                  {getToxicityLevel(resultado) ? (
-                    <p>This comment contains toxic language that may be harmful or offensive.</p>
-                  ) : (
-                    <p>This comment appears to be safe and non-toxic.</p>
-                  )}
-                </div>
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700/50 hover:bg-gray-800/60 transition-all duration-300">
+            <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl mx-auto mb-6 flex items-center justify-center shadow-lg">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-semibold mb-4 text-center">Privado & Seguro</h3>
+            <p className="text-gray-400 text-center leading-relaxed">
+              Tus datos están protegidos y el análisis se realiza de forma segura
+            </p>
+          </div>
+        </div>
 
-                {/* Optional: Show additional details if your API provides them */}
-                {resultado?.confidence && (
-                  <div className="mt-4 pt-4 border-t border-gray-600">
-                    <div className="flex justify-between text-sm text-gray-400">
-                      <span>Confidence Level:</span>
-                      <span>{Math.round(resultado.confidence * 100)}%</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Analyze Another Button */}
-              <button
-                onClick={handleNewAnalysis}
-                className="w-full bg-slate-700 hover:bg-slate-600 text-amber-400 font-semibold py-4 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2 border border-slate-600"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-                </svg>
-                <span>Analyze Another Comment</span>
-              </button>
-            </>
-          )}
+        {/* Stats Section */}
+        <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 mb-12 shadow-2xl border border-gray-700/50">
+          <h3 className="text-2xl font-semibold mb-8 text-center">
+            <span className="bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+              🚀 Rendimiento Superior
+            </span>
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-orange-500 mb-2">99.5%</div>
+              <div className="text-gray-400">Precisión</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-blue-500 mb-2">&lt;1s</div>
+              <div className="text-gray-400">Tiempo de Respuesta</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-purple-500 mb-2">24/7</div>
+              <div className="text-gray-400">Disponibilidad</div>
+            </div>
+          </div>
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8">
-          <div className="flex items-center justify-center space-x-6 text-sm text-gray-500">
-            <div className="flex items-center space-x-2">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        <div className="text-center">
+          <div className="flex justify-center space-x-8 text-sm text-gray-400 mb-4">
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              <span>Secure & Private</span>
+              Seguro & Privado
             </div>
-            <div className="flex items-center space-x-2">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
-              <span>Lightning Fast</span>
+              Súper Rápido
             </div>
-            <div className="flex items-center space-x-2">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            <div className="flex items-center">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>AI-Powered</span>
+              IA Avanzada
             </div>
           </div>
-          <p className="text-gray-600 text-xs mt-4">
+          <p className="text-gray-500 text-sm">
             Powered by advanced machine learning to keep online communities safe and respectful.
           </p>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.5s ease-out;
+        }
+      `}</style>
     </div>
   );
-}
+};
 
 export default Hero;
