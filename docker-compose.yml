@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile.frontend
     container_name: node-frontend
     ports:
-      - "3000:3000"
+      - "5173:5173"
     working_dir: /app
     volumes:
       - ./client:/app
@@ -29,11 +29,18 @@ services:
     restart: unless-stopped
     depends_on:
       - backend
+
   ngrok:
     image: ngrok/ngrok:latest
     container_name: ngrok-tunnel
     depends_on:
-     - frontend
+      - frontend
     environment:
       - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
     command: http frontend:5173
+    ports:
+      - "4040:4040"  # Accede a http://localhost:4040 para ver el túnel
+
+networks:
+  default:
+    driver: bridge
