@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: fastapi-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: node-frontend
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    volumes:
+      - ./client:/app
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - backend
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok-tunnel
+    depends_on:
+     - frontend
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command: http frontend:5173
