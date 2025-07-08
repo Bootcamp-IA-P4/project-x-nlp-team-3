@@ -12,3 +12,5 @@ transformers
 joblib
 pandas
 numpy
+requests
+mlflow
