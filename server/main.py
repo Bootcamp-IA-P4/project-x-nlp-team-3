@@ -9,7 +9,7 @@ app = FastAPI(title="YouToxic Toxicity Classifier")
 # CORS para frontends locales o deploy
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "*"],
+    allow_origins=["http://localhost:5173", "https://chicken-renewed-basically.ngrok-free.app","*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
