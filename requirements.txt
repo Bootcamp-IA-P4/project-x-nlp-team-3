@@ -1,0 +1,14 @@
+python-dotenv
+sqlalchemy
+fastapi
+uvicorn
+pydantic
+supabase
+google-api-python-client
+safetensors
+torch 
+scikit-learn
+transformers
+joblib
+pandas
+numpy
