@@ -15,30 +15,51 @@ const AnilisisComentario = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleAnalizar = async () => {
-    if (!comentario.trim()) {
-      setError('Por favor ingresa un comentario para analizar');
-      return;
+const handleAnalizar = async () => {
+  if (!comentario.trim()) {
+    setError('Por favor ingresa un comentario para analizar');
+    return;
+  }
+
+  setIsLoading(true);
+  setError(null);
+  setResultado(null);
+
+  try {
+    let response;
+    if (modeloSeleccionado === 'ml') {
+      response = await evaluarComentarioML(comentario);
+    } else {
+      response = await evaluarComentarioNLP(comentario);
     }
 
-    setIsLoading(true);
-    setError(null);
-    setResultado(null);
+    if (response && response.prediction !== undefined) {
+      let toxicity_score;
 
-    try {
-      let response;
-      if (modeloSeleccionado === 'ml') {
-        response = await evaluarComentarioML(comentario);
+      if (typeof response.prediction === 'number') {
+        toxicity_score = response.prediction;
+      } else if (typeof response.prediction === 'string') {
+        // Si es 'toxic' o 'not toxic', asigna un score de referencia
+        toxicity_score = response.prediction.toLowerCase() === 'toxic' ? 1.0 : 0.0;
       } else {
-        response = await evaluarComentarioNLP(comentario);
+        toxicity_score = 0.0; // fallback seguro
       }
-      
-      setResultado(response);
-    } catch (err) {
-      setError('Error al analizar el comentario. Intenta nuevamente.');
-    } finally {
-      setIsLoading(false);
+
+      setResultado({
+        toxicity_score: toxicity_score,
+      });
+    } else if (response && response.detail) {
+      setError(`Error del servidor: ${response.detail}`);
+    } else {
+      setError('Respuesta inesperada del servidor.');
     }
+
+  } catch (err) {
+    console.error("API error:", err);
+    setError('Error al analizar el comentario. Intenta nuevamente.');
+  } finally {
+    setIsLoading(false);
+  }
   };
 
   const handleKeyPress = (e) => {

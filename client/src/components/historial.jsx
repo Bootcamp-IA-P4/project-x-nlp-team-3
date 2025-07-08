@@ -5,6 +5,8 @@ function Historial() {
   const [historial, setHistorial] = useState([]);
   const [visibleItems, setVisibleItems] = useState(new Set());
 
+const maxComments = 20;
+
   useEffect(() => {
     const fetchHistorial = async () => {
       try {
@@ -63,16 +65,10 @@ function Historial() {
   };
 
   const getStatusIcon = (label) => {
-    if (!label) return '🔍';
-    
-    // Convertir a string si no lo es
-    const labelStr = typeof label === 'string' ? label : String(label);
-    
-    if (labelStr.toLowerCase().includes('toxic')) {
-      return '⚠️';
-    }
-    return '✅';
-  };
+  if (label === true) return '⚠️';
+  if (label === false) return '✅';
+  return '🔍';
+};
 
   return (
     <section id="historial" className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen relative overflow-hidden">
@@ -131,7 +127,7 @@ function Historial() {
         ) : (
           <div className="max-w-6xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {historial.map((item, index) => (
+              {historial.slice(0, maxComments).map((item, index) => (
                 <div
                   key={index}
                   data-index={index}
@@ -172,7 +168,7 @@ function Historial() {
                       {/* Status badge */}
                       <div className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(item.label)}`}>
                         <span className="mr-1">{getStatusIcon(item.label)}</span>
-                        {item.label || 'Analizado'}
+                        Analizado
                       </div>
                     </div>
 

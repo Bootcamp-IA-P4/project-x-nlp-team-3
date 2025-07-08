@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Eliminar bordes blancos y configurar base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  background-color: #111827; /* bg-gray-900 de Tailwind */
+  min-height: 100%;
+}
+
 /* Animaciones adicionales para YouToxic */
 @keyframes fadeIn {
   from { 
