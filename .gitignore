@@ -196,3 +196,4 @@ cython_debug/
 # MLflow runs directory
 mlruns/
 Models/bert_toxic_comments/model.safetensors
+mlartifacts/
