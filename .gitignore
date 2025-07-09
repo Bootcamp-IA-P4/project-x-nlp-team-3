@@ -200,3 +200,5 @@ mlruns/
 
 
 *.safetensors
+Models/deberta_toxic_comments/zip/model_optimized.pt
+Models/deberta_toxic_comments/zip/model_optimized.pt.gz
