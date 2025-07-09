@@ -9,11 +9,12 @@ from googleapiclient.discovery import build
 from urllib.parse import urlparse, parse_qs
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
+from server.pipeline import preprocess_text
 
 router = APIRouter()
 
 try:
-    clf_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'pipeline_multinomial_nb_new.pkl')
+    clf_path = os.path.join(os.path.dirname(__file__), '..', 'models', 'pipeline_multinomial_nb.pkl')
     clf_path = os.path.abspath(clf_path)
     clf = joblib.load(clf_path)
     print(f"✅ Modelo ML cargado exitosamente desde {clf_path}")
@@ -55,7 +56,7 @@ async def predict_toxicity(data: PredictionRequest):
         raise HTTPException(status_code=500, detail="Model not loaded")
     
     try:
-        input_text = data.text
+        input_text = preprocess_text(data.text)
         prediction = clf.predict([input_text])[0]
 
         data_to_save = {
@@ -83,7 +84,7 @@ async def predict_toxicity_nlp(data: PredictionRequest):
         raise HTTPException(status_code=500, detail="Model not loaded")
     
     try:
-        input_text = data.text
+        input_text = preprocess_text(data.text)
 
         inputs = tokenizer(
             input_text,
@@ -147,8 +148,10 @@ async def predict_youtube_comments(data: YouTubeRequest):
         video_id = extract_video_id(data.url)
         if not video_id:
             raise HTTPException(status_code=400, detail="Invalid YouTube URL")
-
+        
+        preprocess_text(comments)
         comments = get_comments(youtube, video_id)
+        video_info = get_video_info(youtube, video_id)
 
         results = []
         for comment in comments:
@@ -170,6 +173,7 @@ async def predict_youtube_comments(data: YouTubeRequest):
 
         return {
             "video_id": video_id,
+            "video_info": video_info,
             "results": results
         }
 
@@ -223,6 +227,7 @@ async def predict_youtube_comments_nlp(data: YouTubeRequest):
         if not video_id:
             raise HTTPException(status_code=400, detail="Invalid YouTube URL")
         
+        preprocess_text(comments)
         comments = get_comments(youtube, video_id)
         video_info = get_video_info(youtube, video_id)
 

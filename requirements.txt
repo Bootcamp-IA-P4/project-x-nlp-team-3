@@ -15,6 +15,7 @@ pandas
 numpy
 requests
 mlflow
+<<<<<<< HEAD
 =======
 alembic==1.16.2
 annotated-types==0.7.0
@@ -173,3 +174,7 @@ websocket-client==1.8.0
 Werkzeug==3.1.3
 zipp==3.23.0
 >>>>>>> cb9b97b (fix: fix of the venv)
+=======
+emoji
+nltk
+>>>>>>> da44853 (chore: add pipeline to enpoints)
