@@ -149,7 +149,6 @@ async def predict_youtube_comments(data: YouTubeRequest):
         if not video_id:
             raise HTTPException(status_code=400, detail="Invalid YouTube URL")
         
-        preprocess_text(comments)
         comments = get_comments(youtube, video_id)
         video_info = get_video_info(youtube, video_id)
 
@@ -210,6 +209,7 @@ def get_comments(youtube, video_id, max_results=100):
         response = request.execute()
         for item in response['items']:
             comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+            preprocess_text(comment)
             comments.append(comment)
             if len(comments) >= max_results:
                 break
@@ -227,7 +227,6 @@ async def predict_youtube_comments_nlp(data: YouTubeRequest):
         if not video_id:
             raise HTTPException(status_code=400, detail="Invalid YouTube URL")
         
-        preprocess_text(comments)
         comments = get_comments(youtube, video_id)
         video_info = get_video_info(youtube, video_id)
 
@@ -331,6 +330,7 @@ def get_comments(youtube, video_id, max_results=200):
         response = request.execute()
         for item in response['items']:
             comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+            preprocess_text(comment)
             comments.append(comment)
             if len(comments) >= max_results:
                 break
