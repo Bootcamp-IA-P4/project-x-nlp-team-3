@@ -222,8 +222,9 @@ async def predict_youtube_comments_nlp(data: YouTubeRequest):
         video_id = extract_video_id(data.url)
         if not video_id:
             raise HTTPException(status_code=400, detail="Invalid YouTube URL")
-
+        
         comments = get_comments(youtube, video_id)
+        video_info = get_video_info(youtube, video_id)
 
         results = []
         for comment in comments:
@@ -256,12 +257,45 @@ async def predict_youtube_comments_nlp(data: YouTubeRequest):
 
         return {
             "video_id": video_id,
+            "video_info": video_info,
             "results": results
         }
 
     except Exception as e:
         print(f"❌ Error en predict_youtube_comments: {e}")
         raise HTTPException(status_code=500, detail=f"Prediction error: {e}")
+    
+    
+def get_video_info(youtube, video_id):
+    try:
+        request = youtube.videos().list(
+            part="snippet,statistics",
+            id=video_id
+        )
+        response = request.execute()
+        if "items" in response and len(response["items"]) > 0:
+            item = response["items"][0]
+            title = item["snippet"]["title"]
+            channel = item["snippet"]["channelTitle"]
+            views = int(item["statistics"]["viewCount"])
+            return {
+                "title": title,
+                "channel": channel,
+                "views": views
+            }
+        else:
+            return {
+                "title": "Video procesado",
+                "channel": "Canal desconocido",
+                "views": 0
+            }
+    except Exception as e:
+        print(f"❌ Error obteniendo información del video: {e}")
+        return {
+            "title": "Video procesado",
+            "channel": "Canal desconocido",
+            "views": 0
+        }
 
 
 

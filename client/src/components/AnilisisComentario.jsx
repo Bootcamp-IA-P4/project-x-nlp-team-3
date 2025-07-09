@@ -33,16 +33,31 @@ const handleAnalizar = async () => {
       response = await evaluarComentarioNLP(comentario);
     }
 
-    if (response && response.prediction !== undefined) {
+    if (response && (response.prediction !== undefined || response.label !== undefined)) {
+      console.log('Respuesta completa:', response);
+      
+      // Determinar qué campo usar (prediction o label)
+      let predictionValue = response.prediction !== undefined ? response.prediction : response.label;
+      console.log('Tipo de valor:', typeof predictionValue);
+      console.log('Valor:', predictionValue);
+      
       let toxicity_score;
 
-      if (typeof response.prediction === 'number') {
-        toxicity_score = response.prediction;
-      } else if (typeof response.prediction === 'string') {
-        // Si es 'toxic' o 'not toxic', asigna un score de referencia
-        toxicity_score = response.prediction.toLowerCase() === 'toxic' ? 1.0 : 0.0;
+      if (typeof predictionValue === 'boolean') {
+        // Si es booleano, convierte True a 1.0 y False a 0.0
+        toxicity_score = predictionValue ? 1.0 : 0.0;
+        console.log('Procesado como booleano:', toxicity_score);
+      } else if (typeof predictionValue === 'number') {
+        toxicity_score = predictionValue;
+        console.log('Procesado como número:', toxicity_score);
+      } else if (typeof predictionValue === 'string') {
+        // Manejo de strings: '1', 'true', 'toxic' = tóxico
+        const lowerValue = predictionValue.toLowerCase();
+        toxicity_score = (lowerValue === '1' || lowerValue === 'true' || lowerValue === 'toxic') ? 1.0 : 0.0;
+        console.log('Procesado como string:', toxicity_score);
       } else {
         toxicity_score = 0.0; // fallback seguro
+        console.log('Fallback aplicado:', toxicity_score);
       }
 
       setResultado({

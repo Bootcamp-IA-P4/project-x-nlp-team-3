@@ -1,5 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { evaluarYoutubeCommentsML, evaluarYoutubeCommentsNLP } from '../services/api';
+const evaluarYoutubeCommentsML = async (youtubeUrl) => {
+  const response = await fetch('http://localhost:8000/predict/youtube_comments', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: youtubeUrl })
+  });
+  if (!response.ok) throw new Error('Error en API ML');
+  return response.json();
+};
+
+const evaluarYoutubeCommentsNLP = async (youtubeUrl) => {
+  const response = await fetch('http://localhost:8000/predict/youtube_comments_transformer', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: youtubeUrl })
+  });
+  if (!response.ok) throw new Error('Error en API NLP');
+  return response.json();
+};
 
 const AnalisisVideo = ({ setActiveSection }) => {
   const [url, setUrl] = useState('');
@@ -16,11 +34,22 @@ const AnalisisVideo = ({ setActiveSection }) => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Función para validar URL de YouTube
+  const isValidYouTubeUrl = (url) => {
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+    return youtubeRegex.test(url);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!url.trim()) {
       setError('Por favor, ingresa una URL de YouTube válida');
+      return;
+    }
+
+    if (!isValidYouTubeUrl(url)) {
+      setError('La URL ingresada no es válida. Debe ser una URL de YouTube.');
       return;
     }
 
@@ -31,23 +60,42 @@ const AnalisisVideo = ({ setActiveSection }) => {
     setResultado(null);
 
     try {
-      let response;
+      let data;
+      
+      // Usar la API correspondiente según el modelo seleccionado
       if (modeloSeleccionado === 'ml') {
-        response = await evaluarYoutubeCommentsML(url);
+        data = await evaluarYoutubeCommentsML(url);
       } else {
-        response = await evaluarYoutubeCommentsNLP(url);
+        data = await evaluarYoutubeCommentsNLP(url);
       }
-
-      setComments(response?.comments || response?.predictions || []);
-      setVideoInfo(response?.video_info || null);
-      setResultado(response);
+      
+      // Adaptar los datos según la estructura que devuelve tu API
+      // Ajusta estas propiedades según lo que devuelve tu backend
+      setComments(data.results || []);
+      setVideoInfo(data.video_info || {
+        title: data.title,
+        channel: data.channel,
+        views: data.views
+      });
+      setResultado(data);
+      
     } catch (err) {
-      // No seteas error
-      console.log("Comentarios guardados en Historial", err);
+      console.error('Error al analizar video:', err);
+      
+      // Manejar diferentes tipos de errores
+      if (err.message.includes('fetch') || err.message.includes('NetworkError')) {
+        setError('No se pudo conectar con el servidor. Verifica que tu API esté funcionando en http://localhost:8000');
+      } else if (err.message.includes('404')) {
+        setError('Endpoint no encontrado. Verifica que tu API tenga los endpoints correctos.');
+      } else if (err.message.includes('500')) {
+        setError('Error interno del servidor. Revisa los logs de tu backend.');
+      } else {
+        setError(`Error al analizar el video: ${err.message}`);
+      }
+      
     } finally {
       setIsLoading(false);
     }
-
   };
 
   const handleNuevoAnalisis = () => {
@@ -72,14 +120,21 @@ const AnalisisVideo = ({ setActiveSection }) => {
 
   const getAverageScore = () => {
     if (comments.length === 0) return 0;
-    const total = comments.reduce((sum, comment) => sum + comment.toxicity, 0);
+    const total = comments.reduce((sum, comment) => sum + (comment.toxicity || comment.prediction || 0), 0);
     return total / comments.length;
   };
 
-  const getVideoIdFromUrl = (url) => {
-    const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
+  const getTotalComments = () => {
+    return comments.length;
+  };
+
+  const getToxicComments = () => {
+    return comments.filter(c => (c.toxicity || c.prediction || 0) >= 0.6).length;
+  };
+
+  const getToxicityPercentage = () => {
+    if (comments.length === 0) return 0;
+    return ((getToxicComments() / getTotalComments()) * 100).toFixed(1);
   };
 
   return (
@@ -111,7 +166,7 @@ const AnalisisVideo = ({ setActiveSection }) => {
           </div>
           <div className="flex items-center">
             <div className="w-3 h-3 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
-            <span className="text-gray-300">99.5% Precisión</span>
+            <span className="text-gray-300">API Real</span>
           </div>
           <div className="flex items-center">
             <div className="w-3 h-3 bg-purple-500 rounded-full mr-2 animate-pulse"></div>
@@ -172,6 +227,7 @@ const AnalisisVideo = ({ setActiveSection }) => {
                 placeholder="https://www.youtube.com/watch?v=..."
                 className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
                 disabled={isLoading}
+                required
               />
               <p className="text-xs text-gray-400 mt-2">
                 Pega aquí la URL completa del video de YouTube que deseas analizar
@@ -228,6 +284,9 @@ const AnalisisVideo = ({ setActiveSection }) => {
               </svg>
               <h3 className="text-xl font-semibold mb-2">Procesando video...</h3>
               <p className="text-gray-400">Extrayendo y analizando todos los comentarios del video</p>
+              <div className="mt-4 text-sm text-gray-500">
+                Modelo: {modeloSeleccionado === 'ml' ? 'Machine Learning' : 'Transformer NLP'}
+              </div>
             </div>
           </div>
         )}
@@ -268,67 +327,95 @@ const AnalisisVideo = ({ setActiveSection }) => {
           </div>
         )}
 
+        {/* Resumen del Análisis */}
+        {comments.length > 0 && (
+          <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-700/50 mb-8 animate-fadeIn">
+            <div className="flex items-center mb-6">
+              <svg className="w-6 h-6 text-cyan-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <h2 className="text-2xl font-bold text-cyan-400">Resumen del Análisis</h2>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Total Comentarios */}
+              <div className="bg-gray-700/30 rounded-xl p-6 text-center border border-gray-600/50">
+                <div className="flex items-center justify-center mb-4">
+                  <svg className="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-cyan-400 mb-2">{getTotalComments()}</h3>
+                <p className="text-gray-400 text-sm">Total Comentarios</p>
+              </div>
+
+              {/* Comentarios Tóxicos */}
+              <div className="bg-gray-700/30 rounded-xl p-6 text-center border border-gray-600/50">
+                <div className="flex items-center justify-center mb-4">
+                  <svg className="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-orange-400 mb-2">{getToxicComments()}</h3>
+                <p className="text-gray-400 text-sm">Comentarios Tóxicos</p>
+              </div>
+
+              {/* Porcentaje de Toxicidad */}
+              <div className="bg-gray-700/30 rounded-xl p-6 text-center border border-gray-600/50">
+                <div className="flex items-center justify-center mb-4">
+                  <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-yellow-400 mb-2">{getToxicityPercentage()}%</h3>
+                <p className="text-gray-400 text-sm">Tasa de Toxicidad</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Results Summary */}
         {comments.length > 0 && (
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-700/50 mb-8 animate-fadeIn">
             <h2 className="text-2xl font-bold mb-6 text-center">
-              📊 Resumen del Análisis
+              📊 Análisis Detallado
             </h2>
-            
-            {/* Average Toxicity Score */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-lg font-medium">Toxicidad Promedio</span>
-                <span className={`text-xl font-bold ${getToxicityLevel(getAverageScore()).textColor}`}>
-                  {getToxicityLevel(getAverageScore()).level}
-                </span>
-              </div>
-              
-              <div className="w-full bg-gray-700 rounded-full h-4 overflow-hidden">
-                <div
-                  className={`h-full ${getToxicityLevel(getAverageScore()).color} transition-all duration-1000 ease-out`}
-                  style={{ width: `${getScorePercentage(getAverageScore())}%` }}
-                ></div>
-              </div>
-              
-              <div className="flex justify-between mt-2 text-sm text-gray-400">
-                <span>0%</span>
-                <span className="font-medium">
-                  {getScorePercentage(getAverageScore())}%
-                </span>
-                <span>100%</span>
-              </div>
-            </div>
 
             {/* Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <div className="bg-gray-700/30 rounded-lg p-4 text-center">
                 <h3 className="font-semibold mb-2 text-green-400">✅ No Tóxicos</h3>
                 <p className="text-2xl font-bold">
-                  {comments.filter(c => c.toxicity < 0.2).length}
+                  {comments.filter(c => (c.toxicity || c.prediction || 0) < 0.2).length}
                 </p>
                 <p className="text-sm text-gray-400">
-                  {Math.round((comments.filter(c => c.toxicity < 0.2).length / comments.length) * 100)}%
+                  {Math.round((comments.filter(c => (c.toxicity || c.prediction || 0) < 0.2).length / comments.length) * 100)}%
                 </p>
               </div>
               
               <div className="bg-gray-700/30 rounded-lg p-4 text-center">
                 <h3 className="font-semibold mb-2 text-yellow-400">⚠️ Moderados</h3>
                 <p className="text-2xl font-bold">
-                  {comments.filter(c => c.toxicity >= 0.2 && c.toxicity < 0.6).length}
+                  {comments.filter(c => {
+                    const score = c.toxicity || c.prediction || 0;
+                    return score >= 0.2 && score < 0.6;
+                  }).length}
                 </p>
                 <p className="text-sm text-gray-400">
-                  {Math.round((comments.filter(c => c.toxicity >= 0.2 && c.toxicity < 0.6).length / comments.length) * 100)}%
+                  {Math.round((comments.filter(c => {
+                    const score = c.toxicity || c.prediction || 0;
+                    return score >= 0.2 && score < 0.6;
+                  }).length / comments.length) * 100)}%
                 </p>
               </div>
               
               <div className="bg-gray-700/30 rounded-lg p-4 text-center">
                 <h3 className="font-semibold mb-2 text-red-400">🚨 Tóxicos</h3>
                 <p className="text-2xl font-bold">
-                  {comments.filter(c => c.toxicity >= 0.6).length}
+                  {comments.filter(c => (c.toxicity || c.prediction || 0) >= 0.6).length}
                 </p>
                 <p className="text-sm text-gray-400">
-                  {Math.round((comments.filter(c => c.toxicity >= 0.6).length / comments.length) * 100)}%
+                  {Math.round((comments.filter(c => (c.toxicity || c.prediction || 0) >= 0.6).length / comments.length) * 100)}%
                 </p>
               </div>
             </div>
@@ -339,9 +426,6 @@ const AnalisisVideo = ({ setActiveSection }) => {
               <p className="text-lg font-medium">
                 {modeloSeleccionado === 'ml' ? 'Machine Learning' : 'Transformer NLP'}
               </p>
-              <p className="text-sm text-gray-400 mt-1">
-                {modeloSeleccionado === 'ml' ? 'Modelo clásico optimizado' : 'Modelo transformer avanzado'}
-              </p>
             </div>
           </div>
         )}
@@ -349,33 +433,46 @@ const AnalisisVideo = ({ setActiveSection }) => {
         {/* Comments List */}
         {comments.length > 0 && (
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-700/50 animate-fadeIn">
-            <h2 className="text-2xl font-bold mb-6 text-center">
-              💬 Comentarios Analizados
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold">
+                💬 Comentarios Analizados
+              </h2>
+              <button
+                onClick={handleNuevoAnalisis}
+                className="px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded-lg text-white font-medium transition-colors"
+              >
+                Nuevo Análisis
+              </button>
+            </div>
             
             <div className="space-y-4 max-h-96 overflow-y-auto">
-              {comments.map((comment, index) => (
-                <div key={index} className="bg-gray-700/30 rounded-lg p-4 border-l-4 border-opacity-50" 
-                     style={{ borderLeftColor: getToxicityLevel(comment.toxicity).color.replace('bg-', '') }}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className={`text-sm font-medium ${getToxicityLevel(comment.toxicity).textColor}`}>
-                      {getToxicityLevel(comment.toxicity).level}
-                    </span>
-                    <span className="text-sm text-gray-400">
-                      {getScorePercentage(comment.toxicity)}%
-                    </span>
+              {comments.map((comment, index) => {
+                const toxicityScore = comment.toxicity || comment.prediction || 0;
+                const commentText = comment.text || comment.comment || 'Sin texto';
+                
+                return (
+                  <div key={index} className="bg-gray-700/30 rounded-lg p-4 border-l-4 border-opacity-50" 
+                       style={{ borderLeftColor: getToxicityLevel(toxicityScore).color.replace('bg-', '') }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={`text-sm font-medium ${getToxicityLevel(toxicityScore).textColor}`}>
+                        {getToxicityLevel(toxicityScore).level}
+                      </span>
+                      <span className="text-sm text-gray-400">
+                        {getScorePercentage(toxicityScore)}%
+                      </span>
+                    </div>
+                    <p className="text-gray-300 text-sm">
+                      {commentText}
+                    </p>
+                    <div className="w-full bg-gray-600 rounded-full h-2 mt-2">
+                      <div
+                        className={`h-2 rounded-full ${getToxicityLevel(toxicityScore).color} transition-all duration-500`}
+                        style={{ width: `${getScorePercentage(toxicityScore)}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <p className="text-gray-300 text-sm">
-                    {comment.text || comment.comment}
-                  </p>
-                  <div className="w-full bg-gray-600 rounded-full h-2 mt-2">
-                    <div
-                      className={`h-2 rounded-full ${getToxicityLevel(comment.toxicity).color} transition-all duration-500`}
-                      style={{ width: `${getScorePercentage(comment.toxicity)}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
