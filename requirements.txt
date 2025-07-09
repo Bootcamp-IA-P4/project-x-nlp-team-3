@@ -14,3 +14,5 @@ pandas
 numpy
 requests
 mlflow
+emoji
+nltk
