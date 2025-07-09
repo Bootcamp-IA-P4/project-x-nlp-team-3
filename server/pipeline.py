@@ -4,7 +4,22 @@ import re
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+import os
 
+# Ruta local
+nltk_data_path = os.path.join(os.path.expanduser('~'), 'nltk_data')
+nltk.data.path.clear()  # ← Borra rutas previas
+nltk.data.path.append(nltk_data_path)
+# Debug: imprime para confirmar
+print("Rutas NLTK activas:", nltk.data.path)
+
+nltk.download('wordnet', download_dir=nltk_data_path)
+nltk.download('omw-1.4', download_dir=nltk_data_path)
+nltk.download('punkt_tab', download_dir=nltk_data_path)
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+nltk.download('omw-1.4')
 
 def preprocess_text(text):
     '''
