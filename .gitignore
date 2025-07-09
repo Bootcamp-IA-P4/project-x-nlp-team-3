@@ -197,3 +197,4 @@ cython_debug/
 mlruns/
 Models/bert_toxic_comments/model.safetensors
 mlartifacts/
+.venv311/
