@@ -13,10 +13,14 @@ services:
 
   frontend:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
+      context: ./client
+      dockerfile: Dockerfile.dev  
     ports:
-      - "3000:80"
+      - "5173:5173"    
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    working_dir: /app
+    command: ["npm", "run", "dev"]
     env_file:
       - .env
-    restart: always
