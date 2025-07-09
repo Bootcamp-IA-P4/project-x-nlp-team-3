@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: okhater-backend
+    env: docker
+    dockerfilePath: Dockerfile.backend
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: SUPABASE_URL
+        value: # <-- déjalo vacío y completa en el panel de Render
+      - key: SUPABASE_KEY
+        value: # <-- déjalo vacío y completa en el panel de Render
+
+  - type: web
+    name: okhater-frontend
+    env: docker
+    dockerfilePath: Dockerfile.frontend
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: VITE_API_URL
+        value: https://okhater-backend.onrender.com
