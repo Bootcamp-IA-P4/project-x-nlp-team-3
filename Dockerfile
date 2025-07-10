@@ -6,6 +6,16 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+
+# Copiar primero requirements.txt para cacheo
+COPY requirements.txt .
+
+RUN pip install --upgrade pip
+
+RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=requirements.txt,target=requirements.txt \
+    python -m pip install -r requirements.txt
+
 ARG UID=10001
 RUN adduser \
     --disabled-password \
@@ -16,10 +26,7 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
-    #comand
-RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=requirements.txt,target=requirements.txt \
-    python -m pip install -r requirements.txt
+
 
 USER appuser
 
