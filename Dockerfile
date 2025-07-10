@@ -6,6 +6,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+RUN mkdir -p /app/nltk_data && chmod -R 777 /app/nltk_data
 
 # Copiar primero requirements.txt para cacheo
 COPY requirements.txt .
@@ -25,8 +26,6 @@ RUN adduser \
     --no-create-home \
     --uid "${UID}" \
     appuser
-
-
 
 USER appuser
 
