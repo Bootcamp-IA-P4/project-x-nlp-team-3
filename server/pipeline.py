@@ -17,10 +17,10 @@ print("Rutas NLTK activas:", nltk.data.path)
 nltk.download('wordnet', download_dir=nltk_data_path)
 nltk.download('omw-1.4', download_dir=nltk_data_path)
 nltk.download('punkt_tab', download_dir=nltk_data_path)
-nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('stopwords')
-nltk.download('omw-1.4')
+nltk.download('punkt', download_dir=nltk_data_path)
+nltk.download('wordnet', download_dir=nltk_data_path)
+nltk.download('stopwords', download_dir=nltk_data_path)
+nltk.download('omw-1.4', download_dir=nltk_data_path)
 
 def preprocess_text(text):
     '''
