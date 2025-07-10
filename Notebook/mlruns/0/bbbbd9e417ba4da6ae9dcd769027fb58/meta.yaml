@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/0/bbbbd9e417ba4da6ae9dcd769027fb58/artifacts
+end_time: 1751283794489
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: bbbbd9e417ba4da6ae9dcd769027fb58
+run_name: NaiveBayes_Models_Multinominal
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1751283794262
+status: 3
+tags: []
+user_id: jlmateos.ext

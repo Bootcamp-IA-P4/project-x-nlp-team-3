@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/0/af2b55fca98b44568ceea798962fa535/artifacts
+end_time: 1751283794717
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: af2b55fca98b44568ceea798962fa535
+run_name: NaiveBayes_Models_Bernoulli
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1751283794511
+status: 3
+tags: []
+user_id: jlmateos.ext

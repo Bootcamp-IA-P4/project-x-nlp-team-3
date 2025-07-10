@@ -1,0 +1,43 @@
+name: Convert Draft to Issue on Column Move
+on:
+  project_card:
+    types: [moved]
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if moved to Ready column
+        id: check_column
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: project } = await github.rest.projects.getProject({
+              project_id: context.payload.project_card.project_id
+            });
+            const { data: columns } = await github.rest.projects.listColumns({
+              project_id: context.payload.project_card.project_id
+            });
+            const readyColumn = columns.find(c => c.name === 'Ready');
+            
+            if (context.payload.project_card.column_id === readyColumn.id) {
+              const contentUrl = context.payload.project_card.content_url;
+              if (contentUrl && contentUrl.includes('/drafts/')) {
+                return true;
+              }
+            }
+            return false;
+      
+      - name: Convert draft to issue
+        if: steps.check_column.outputs.result == 'true'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const draftId = context.payload.project_card.content_url.split('/').pop();
+            await github.rest.projects.createCard({
+              column_id: context.payload.project_card.column_id,
+              content_id: draftId,
+              content_type: 'DraftIssue'
+            });
+            await github.rest.projects.deleteCard({
+              card_id: context.payload.project_card.id
+            });

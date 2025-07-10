@@ -1,0 +1,14 @@
+artifact_uri: mlflow-artifacts:/0/bb747b8792d74b398e9a12d540c40d5c/artifacts
+end_time: 1751283795147
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: bb747b8792d74b398e9a12d540c40d5c
+run_name: NaiveBayes_Models_Gaussian
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1751283794742
+status: 3
+tags: []
+user_id: jlmateos.ext
