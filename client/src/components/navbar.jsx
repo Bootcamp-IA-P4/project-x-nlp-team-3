@@ -29,9 +29,11 @@ const Navbar = ({ activeSection, setActiveSection }) => {
               className="flex-shrink-0 flex items-center group transition-all duration-300 hover:scale-105"
             >
               <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:from-orange-400 group-hover:to-red-400 transition-all duration-300">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
+                <img 
+                  src="/logo.png" 
+                  alt="Ok.Hater Logo" 
+                  className="w-8 h-8 object-contain"
+                />
               </div>
               <span className="ml-3 text-white text-xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent group-hover:from-orange-300 group-hover:to-red-300 transition-all duration-300">
                 Ok.Hater
