@@ -32,7 +32,7 @@ case 'acerca':
             </div>
           </div>
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
-            Acerca de YouToxic
+            Acerca de Ok.Hater
           </h1>
           <p className="text-gray-300 text-lg">
             Plataforma avanzada de análisis de toxicidad en comentarios usando IA
@@ -58,12 +58,12 @@ case 'acerca':
         {/* Main Content */}
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-gray-700/50 mb-8">
           <h2 className="text-2xl font-bold mb-6 text-center">
-            🚀 ¿Qué es YouToxic?
+            🚀 ¿Qué es Ok.Hater?
           </h2>
           
           <div className="mb-8">
             <p className="text-gray-300 mb-6 text-lg leading-relaxed">
-              YouToxic es una herramienta de análisis de toxicidad que utiliza inteligencia artificial 
+              Ok.Hater es una herramienta de análisis de toxicidad que utiliza inteligencia artificial 
               para evaluar comentarios individuales y comentarios de videos de YouTube. Nuestro objetivo 
               es crear comunidades online más seguras y respetuosas.
             </p>
