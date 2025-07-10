@@ -7,7 +7,8 @@ from nltk.stem import WordNetLemmatizer
 import os
 
 # Ruta local
-nltk_data_path = os.path.join(os.path.expanduser('~'), 'nltk_data')
+nltk_data_path =  "/app/nltk_data"
+os.makedirs(nltk_data_path, exist_ok=True)
 nltk.data.path.clear()  # ← Borra rutas previas
 nltk.data.path.append(nltk_data_path)
 # Debug: imprime para confirmar
