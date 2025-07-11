@@ -194,6 +194,8 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+# Local Netlify folder
+.netlify
 
 # MLflow runs directory
 mlruns/
