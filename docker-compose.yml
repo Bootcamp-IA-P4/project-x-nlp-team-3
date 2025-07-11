@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: always
+
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev  
+    ports:
+      - "5173:5173"    
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    working_dir: /app
+    command: ["npm", "run", "dev"]
+    env_file:
+      - .env
