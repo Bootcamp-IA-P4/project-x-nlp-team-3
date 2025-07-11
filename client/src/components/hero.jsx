@@ -15,7 +15,13 @@ const Hero = ({ onStartAnalysis }) => {
         <div className="text-center mb-16">
           <div className="flex justify-center mb-8">
             <div className="w-24 h-24 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-2xl">
-              <span className="text-white font-bold text-4xl">+</span>
+              <div className="w-35 h-35">
+                <img 
+                  src="/logo.png" 
+                  alt="Ok.Hater Logo" 
+                  className="w-35 h-35 object-contain"
+                />
+              </div>
             </div>
           </div>
           <h1 className="text-7xl font-bold mb-6 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
