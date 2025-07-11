@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+mlruns/
+mlartifacts/
 
 # C extensions
 *.so
@@ -194,3 +196,9 @@ cython_debug/
 .cursorindexingignore
 # Local Netlify folder
 .netlify
+
+# MLflow runs directory
+mlruns/
+Models/bert_toxic_comments/model.safetensors
+mlartifacts/
+.venv311/
