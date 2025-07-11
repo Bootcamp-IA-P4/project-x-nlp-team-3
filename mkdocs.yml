@@ -1,5 +1,41 @@
-site_name: Project X NLP Team 3
-nav:
-  - Inicio: index.md
+site_name: Proyecto NLP - Detección de Toxicidad en YouTube
+site_description: Documentación técnica completa del proyecto de detección de comentarios tóxicos utilizando IA.
+site_author: NLP Team 3
+
 theme:
   name: material
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - toc.integrate
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.code.annotation
+    - content.code.copy
+
+nav:
+  - 'Visión General': 'index.md'
+  - 'Guía de Instalación': 'installation.md'
+  - 'Guía de Uso': 'user-guide.md'
+  - 'Arquitectura de la Aplicación':
+    - 'Frontend': 'client_server.md'
+    - 'Backend': 'client_server.md'
+  - 'API Endpoints': 'api/endpoints.md'
+  - 'Modelos de IA':
+    - 'Resumen de Modelos': 'api/models_summary.md'
+    - 'Machine Learning Supervisado': 'models/supervised_ml.md'
+    - 'Redes Neuronales': 'models/neural_network.md'
+    - 'Transformers': 'models/transformer.md'
+  - 'Gestión de Datos': 'data.md'
+  - 'Experimentación (Notebooks)': 'notebooks.md'
