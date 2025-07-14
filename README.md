@@ -1,6 +1,5 @@
-# 🚀 Project X: Detección de Toxicidad en YouTube con IA 🚀
+# 🚀 Project X: Detección de Toxicidad en YouTube con IA 
 
-[![Estado del Despliegue](https://api.netlify.com/api/v1/badges/d95d5a6b-c2a1-41e9-9599-88a5b8aa881a/deploy-status)](https://app.netlify.com/sites/project-x-nlp-team-3/deploys)
 [![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://www.python.org/)
 [![Docker](https://img.shields.io/badge/Docker-20.10-blue.svg?logo=docker)](https://www.docker.com/)
@@ -36,28 +35,29 @@ Este proyecto implementa un sistema robusto capaz de clasificar comentarios de Y
 
 ---
 
-## 🌐 Demo en Vivo y Documentación
+##  🌐 Demo en Vivo y Documentación
 
 ¡Prueba la aplicación y explora la documentación técnica completa!
 
-* 🌍 **Documentación en Vivo**: [project-x-nlp-team-3.netlify.app](https://project-x-nlp-team-3.netlify.app)
+* 🌍 **Documentación en Vivo**: [(https://project-x-nlp-team-3.netlify.app)](https://resonant-hotteok-331ed1.netlify.app/)
 * 📖 **Encyclopédie Profonde (DeepWiki)**: Para búsquedas semánticas y profundas en la base de código del proyecto, visita nuestra DeepWiki: [https://deepwiki.com/Bootcamp-IA-P4/project-x-nlp-team-3](https://deepwiki.com/Bootcamp-IA-P4/project-x-nlp-team-3)
 
 ## ✨ Características Principales
 
 * 🤖 **Enfoque de Modelo Dual**:
-  * **Clasificación Rápida**: Un modelo de ML (Logistic Regression + TF-IDF) para una detección de toxicidad binaria y eficiente.
-  * **Análisis Profundo**: Un modelo Transformer (DistilBERT) para un análisis de sentimiento contextual (Positivo/Negativo).
+  * **Clasificación Rápida**: Un modelo de ML (Naive Bayes + TF-IDF) para una detección de toxicidad binaria y eficiente.
+  * **Análisis Profundo**: Un modelo Transformer (DeBERTa) para un análisis de sentimiento contextual (Positivo/Negativo).
 * ⚡ **API de Alto Rendimiento**: Construida con FastAPI, ofrece endpoints asíncronos para servir los modelos de IA.
 * 🐳 **Totalmente Contenerizado**: Usa Docker y Docker Compose para empaquetar y ejecutar los servicios de backend y frontend, garantizando la consistencia y facilidad de despliegue.
-* 🗣️ **Recolección de Datos Reales**: Integra la API de YouTube v3 para obtener y analizar comentarios de cualquier video.
+* 🗣**Recolección de Datos Reales**: Integra la API de YouTube v3 para obtener y analizar comentarios de cualquier video.
 * 💾 **Persistencia de Datos**: Utiliza Supabase (PostgreSQL) para el almacenamiento de datos, gestionado a través del ORM SQLAlchemy.
 * 🔄 **CI/CD para Documentación**: Un flujo de trabajo de GitHub Actions construye y despliega automáticamente la documentación en GitHub Pages.
 * 📚 **Documentación Exhaustiva**: Sitio de documentación creado con MkDocs y Material for MkDocs, que detalla cada aspecto del proyecto.
 
-## 🏗️ Arquitectura y Flujo del Proyecto
+## ️🏗️ Arquitectura y Flujo del Proyecto
 
 El sistema está diseñado con componentes desacoplados que interactúan a través de APIs, siguiendo las mejores prácticas de la ingeniería de software y MLOps.
+
 
 ```mermaid
 graph TD
@@ -69,16 +69,24 @@ graph TD
         F[🌐 Cliente Web/UI]
     end
     
-    subgraph "Contenedores de Servicios (Docker Compose)"
+    subgraph "Contenedores de Servicios (Docker Compose)<img width="512" height="512" alt="social_15466088" src="https://github.com/user-attachments/assets/93ea1f02-3b69-4c3f-a95d-9376b97bca99" />
+"
+        %% Espacio para evitar que el título del subgráfico padre sea tapado
+        
         subgraph "Servicio Backend"
             B[🐳 Contenedor Backend] --> API[⚡ FastAPI Server] ;
         end
+        
+        %% Más espacio para empujar el subgráfico de Frontend hacia abajo
+        
         subgraph "Servicio Frontend"
             C[🐳 Contenedor Frontend] --> F;
         end
     end
     
-    subgraph "Lógica de Aplicación (Dentro del Contenedor Backend)"
+    subgraph "Lógica de Aplicación (Dentro del Contenedor Backend)<img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/225086fa-1839-4247-ac11-dec5b9e16d7c" />"
+        %% Espacio para empujar los nodos hacia abajo y evitar que el título del subgráfico sea tapado
+        
         API --> RT[🔄 Enrutador de API];
         RT --> P[📝 Preprocesamiento de Texto];
         RT --> DB[💾 Lógica de Base de Datos];
@@ -89,7 +97,8 @@ graph TD
         YT --> GAPI[<-- Google API -->];
     end
     
-    subgraph "CI/CD & Infraestructura de Código (GitHub)"
+    
+    subgraph "CI/CD & Infraestructura de Código (GitHub)<img width="512" height="512" alt="image" src="https://github.com/user-attachments/assets/de8cc36c-f755-4852-82e3-e856d85f4852" />"
         REPO[🐙 Repositorio GitHub];
         REPO -- Push en 'main' --> GHA[🔄 GitHub Actions];
         GHA -- Construye y Despliega --> DOCS[📚 Sitio de Documentación];
@@ -105,9 +114,10 @@ graph TD
     style B fill:#add,stroke:#333,stroke-width:2px
     style C fill:#add,stroke:#333,stroke-width:2px
     style GHA fill:#f0ad4e,stroke:#333,stroke-width:2px
-```
 
-## 🛠️ Stack Tecnológico
+```
+----
+## ️ Stack Tecnológico
 
 | Área                  | Tecnología                         | Propósito                                                                 |
 |-----------------------|------------------------------------|---------------------------------------------------------------------------|
@@ -193,34 +203,42 @@ Una vez en marcha, puedes interactuar con el sistema de dos maneras:
 1. **Interfaz Web**: Abre http://localhost:5173 en tu navegador para usar la interfaz gráfica.
 2. **API Directa**: Envía peticiones HTTP a los endpoints del backend en http://localhost:8000. Consulta la [documentación de la API](https://project-x-nlp-team-3.netlify.app/api/endpoints) para más detalles.
 
-## 📊 Modelos de Inteligencia Artificial
+##  📊 Modelos de Inteligencia Artificial
 Este proyecto utiliza un enfoque híbrido para ofrecer flexibilidad y rendimiento.
 
 ### Enfoque 1: Machine Learning Supervisado (Clasificación Rápida)
-* **Endpoint**: `/predict`
-* **Tecnología**: Scikit-learn (ej. LogisticRegression) + TF-IDF.
-* **Proceso**: El texto se convierte en un vector numérico usando TF-IDF, que mide la importancia de cada palabra. Luego, un modelo de ML clásico, ligero y rápido, realiza una clasificación binaria (Tóxico/No Tóxico).
-* **Ideal para**: Clasificación masiva y rápida donde solo se necesita una respuesta binaria.
+*   **Modelo**: `Multinomial Naive Bayes` optimizado.
+*   **Tecnología**: `Scikit-learn` y `Joblib` para la serialización.
+*   **Preprocesamiento**: Se aplica un pipeline que incluye `CountVectorizer` para la vectorización del texto, transformando los comentarios en una representación numérica basada en la frecuencia de las palabras. El texto pasa por una limpieza exhaustiva (eliminación de URLs, emojis, menciones, hashtags, puntuación irrelevante) y lematización para normalizar las palabras a su forma base.
+*   **Proceso**: Este modelo, ligero y eficiente, realiza una clasificación binaria (`Tóxico`/`No Tóxico`). Es ideal para escenarios que requieren una respuesta rápida y un bajo consumo de recursos.
+*   **Endpoint**: `/predict_ml`
 
 ### Enfoque 2: Modelo Transformer (Análisis Profundo)
-* **Endpoint**: `/analyze`
-* **Tecnología**: DistilBERT desde Hugging Face.
-* **Proceso**: Utiliza un modelo de Deep Learning pre-entrenado que entiende el contexto y los matices del lenguaje. Proporciona una clasificación de sentimiento más detallada (Positivo/Negativo) con un puntaje de confianza.
-* **Ideal para**: Un análisis más profundo y preciso de comentarios individuales.
+*   **Modelo**: `DeBERTa` (Decoupled Attention Mechanism for Transformers) de Hugging Face.
+*   **Tecnología**: `PyTorch` y la librería `Transformers` de Hugging Face.
+*   **Preprocesamiento**: Similar al modelo de ML, el texto se limpia y lematiza. Luego, se tokeniza utilizando `AutoTokenizer` (compatible con DeBERTa) para preparar la entrada para el modelo Transformer, asegurando que se manejen adecuadamente los matices contextuales del lenguaje.
+*   **Proceso**: Este modelo de Deep Learning pre-entrenado es capaz de capturar relaciones contextuales complejas y matices semánticos en el texto. Proporciona un análisis de sentimiento más detallado, ofreciendo una clasificación (`Positivo`/`Negativo`) junto con un puntaje de confianza. Es adecuado para un análisis más profundo y preciso de comentarios individuales.
+*   **Endpoint**: `/predict_nlp`
 
-## 🔌 Endpoints de la API
+##  MLOps y Despliegue de Modelos
+La integración de los modelos en la API se realiza de manera robusta y escalable:
+*   **Carga de Modelos**: Ambos modelos (`pipeline_multinomial_nb.pkl` y el modelo `DeBERTa` guardado en `model_transformer`) se cargan al iniciar la aplicación FastAPI, asegurando que estén listos para la inferencia.
+*   **Servicio de Predicciones**: FastAPI expone endpoints asíncronos (`/predict_ml` y `/predict_nlp`) que permiten a los clientes interactuar con los modelos de manera eficiente.
+*   **Contenerización**: La aplicación completa, incluyendo los modelos y sus dependencias, se empaqueta en contenedores Docker. Esto garantiza un entorno de ejecución consistente y facilita el despliegue en cualquier infraestructura compatible con Docker.
+
+##  🔌 Endpoints de la API
 La API expone varios endpoints para la interacción. Aquí están los principales:
 
 | Método | Endpoint                       | Descripción                                                                 |
 |--------|--------------------------------|-----------------------------------------------------------------------------|
-| `POST` | `/predict`                     | Realiza una predicción de toxicidad rápida (Tóxico/No Tóxico).              |
-| `POST` | `/analyze`                     | Realiza un análisis de sentimiento profundo (Positivo/Negativo).            |
+| `POST` | `/predict_ml`                  | Realiza una predicción de toxicidad rápida (Tóxico/No Tóxico) usando el modelo Naive Bayes. |
+| `POST` | `/predict_nlp`                 | Realiza un análisis de sentimiento profundo (Positivo/Negativo) usando el modelo DeBERTa. |
 | `GET`  | `/comments/{video_id}`         | Obtiene comentarios de un video desde la base de datos.                     |
 | `GET`  | `/youtube_comments/{video_id}` | Obtiene comentarios frescos directamente desde la API de YouTube.           |
 
 Para una descripción completa de los cuerpos de las peticiones y las respuestas, visita la [Referencia de la API](https://project-x-nlp-team-3.netlify.app/api/endpoints).
 
-## 🔄 CI/CD y Automatización
+##  🔄 CI/CD y Automatización
 * **Generación de Documentación**: Cada vez que se hace un push a la rama main, una GitHub Action se activa, instala MkDocs, construye el sitio de documentación y lo despliega en GitHub Pages.
 * **Gestión de Proyectos**: Se utiliza una Action para convertir automáticamente las "Draft Issues" de un tablero de proyecto de GitHub en issues formales, agilizando la gestión de tareas.
 
