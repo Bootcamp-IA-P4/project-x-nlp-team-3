@@ -12,26 +12,27 @@ Este proyecto implementa un sistema robusto capaz de clasificar comentarios de Y
 
 ---
 
-## 📖 Tabla de Contenidos
+##  Tabla de Contenidos
 
-* [🌐 Demo en Vivo y Documentación](#-demo-en-vivo-y-documentación)
+* [ Demo en Vivo y Documentación](#-demo-en-vivo-y-documentación)
 * [✨ Características Principales](#-características-principales)
-* [🏗️ Arquitectura y Flujo del Proyecto](#️-arquitectura-y-flujo-del-proyecto)
-* [🛠️ Stack Tecnológico](#️-stack-tecnológico)
+* [️ Arquitectura y Flujo del Proyecto](#️-arquitectura-y-flujo-del-proyecto)
+* [️ Stack Tecnológico](#️-stack-tecnológico)
 * [⚙️ Instalación y Puesta en Marcha](#️-instalación-y-puesta-en-marcha)
   * [Prerrequisitos](#prerrequisitos)
   * [Configuración del Entorno](#configuración-del-entorno)
   * [Ejecución con Docker (Recomendado)](#ejecución-con-docker-recomendado)
   * [Ejecución Manual (Alternativa)](#ejecución-manual-alternativa)
 * [▶️ Cómo Usar la Aplicación](#️-cómo-usar-la-aplicación)
-* [📊 Modelos de Inteligencia Artificial](#-modelos-de-inteligencia-artificial)
+* [ Modelos de Inteligencia Artificial](#-modelos-de-inteligencia-artificial)
   * [Enfoque 1: Machine Learning Supervisado (Clasificación Rápida)](#enfoque-1-machine-learning-supervisado-clasificación-rápida)
   * [Enfoque 2: Modelo Transformer (Análisis Profundo)](#enfoque-2-modelo-transformer-análisis-profundo)
-* [🔌 Endpoints de la API](#-endpoints-de-la-api)
-* [🔄 CI/CD y Automatización](#-cicd-y-automatización)
-* [🤝 Contribuciones](#-contribuciones)
-* [📜 Licencia](#-licencia)
-* [🙏 Agradecimientos](#-agradecimientos)
+* [ MLOps y Despliegue de Modelos](#-mlops-y-despliegue-de-modelos)
+* [ Endpoints de la API](#-endpoints-de-la-api)
+* [ CI/CD y Automatización](#-cicd-y-automatización)
+* [ Contribuciones](#-contribuciones)
+* [ Licencia](#-licencia)
+* [ Agradecimientos](#-agradecimientos)
 
 ---
 
@@ -62,11 +63,11 @@ El sistema está diseñado con componentes desacoplados que interactúan a trav�
 ```mermaid
 graph TD
     subgraph "Usuario Final & Desarrollador"
-        U[👨‍💻 Usuario/Cliente API]
+        U[‍ Usuario/Cliente API]
     end
     
     subgraph "Capa de Presentación (Frontend)"
-        F[🌐 Cliente Web/UI]
+        F[ Cliente Web/UI]
     end
     
     subgraph "Contenedores de Servicios (Docker Compose)<img width="512" height="512" alt="social_15466088" src="https://github.com/user-attachments/assets/93ea1f02-3b69-4c3f-a95d-9376b97bca99" />
@@ -74,13 +75,13 @@ graph TD
         %% Espacio para evitar que el título del subgráfico padre sea tapado
         
         subgraph "Servicio Backend"
-            B[🐳 Contenedor Backend] --> API[⚡ FastAPI Server] ;
+            B[ Contenedor Backend] --> API[⚡ FastAPI Server] ;
         end
         
         %% Más espacio para empujar el subgráfico de Frontend hacia abajo
         
         subgraph "Servicio Frontend"
-            C[🐳 Contenedor Frontend] --> F;
+            C[ Contenedor Frontend] --> F;
         end
     end
     
@@ -242,7 +243,7 @@ Para una descripción completa de los cuerpos de las peticiones y las respuestas
 * **Generación de Documentación**: Cada vez que se hace un push a la rama main, una GitHub Action se activa, instala MkDocs, construye el sitio de documentación y lo despliega en GitHub Pages.
 * **Gestión de Proyectos**: Se utiliza una Action para convertir automáticamente las "Draft Issues" de un tablero de proyecto de GitHub en issues formales, agilizando la gestión de tareas.
 
-## 🤝 Contribuciones
+##  Contribuciones
 Las contribuciones son el corazón del código abierto. Si deseas mejorar este proyecto, por favor sigue estos pasos:
 1. Haz un Fork del repositorio.
 2. Crea una rama para tu nueva funcionalidad (`git checkout -b feature/AmazingFeature`).
@@ -250,10 +251,10 @@ Las contribuciones son el corazón del código abierto. Si deseas mejorar este p
 4. Haz Push a tu rama (`git push origin feature/AmazingFeature`).
 5. Abre una Pull Request.
 
-## 📜 Licencia
+##  Licencia
 Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
 
-## 🙏 Agradecimientos
+##  Agradecimientos
 * Al equipo del Bootcamp de IA por su invaluable guía y apoyo.
 * A la comunidad de Hugging Face por democratizar el acceso a los modelos Transformer.
 * A los creadores de todas las librerías y herramientas de código abierto que han hecho posible este proyecto.
