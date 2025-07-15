@@ -258,3 +258,21 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más 
 * Al equipo del Bootcamp de IA por su invaluable guía y apoyo.
 * A la comunidad de Hugging Face por democratizar el acceso a los modelos Transformer.
 * A los creadores de todas las librerías y herramientas de código abierto que han hecho posible este proyecto.
+
+
+## 📊 Retrospectiva Final de Proyecto 🚀
+
+¡Felicidades por finalizar el proyecto de detección de mensajes de odio en YouTube\! Es momento de reflexionar sobre todo el camino recorrido, aprender de nuestras experiencias y crecer como equipo.
+
+**Objetivo:** Identificar qué funcionó muy bien, qué podríamos mejorar y qué aprendizajes clave nos llevamos para futuros proyectos.
+
+
+
+| 🧑‍💻 **Miembro del Equipo** | 🟢 **Lo que Funcionó Bien** (¡Éxitos y Acerdos\!) 🥳 | 🟡 **Lo que Podríamos Mejorar** (Oportunidades de Crecimiento) 🤔 | 🔴 **Aprendizajes Clave & Acciones a Futuro** (Lecciones Aprendidas) 🧠 |
+| :----------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [mikewig](https://github.com/mikewig) (Fullstack Dev, DevOps) | Me ha gustado mucho la química con el equipo, todo ha ido de maravilla en cuanto al proyecto | Diría que seleccionar bien el rol de cada uno, ya que al principio escogí un rol pero termine haciendo otras cosas además de eso | Aprendí un poco de front-end y back-end, lo cual me alegra ya que sobre todo en front no tenia mucho conocimiento acerca de esto |
+| [Jorgeluuu](https://github.com/Jorgeluuu) (ML Engineer) | Me ha sorprendido gratamente la sinergia de todo el equipo, la coordinación que hemos tenido en todo momento para completar cada objetivo. | Siento que nos hemos compenetrado muy bien entre todos, abarcando todos los puntos claves del proyecto gracias a la definición de roles que hemos tenido. Por lo que no siento nada en lo que hacer hincapié | Me quedo con las Pull Request, ya no solo para saber lo que ha ido haciendo cada uno, sino a la hora de realizar los mergeos de ramas, ya sea de una misma rama o a distintas ramas. |
+| [abbyenredes](https://github.com/abbyenredes) (Data Analyst, DevOps) | Buena sinergia en el equipo, completamos la mayoría de objetivos | No siento que haya nada relevante, me parece que abarcamos bien cada uno el proyecto con roles muy bien definidos | Las PR, son una maravilla a la hora de hacer merge|
+| [mr-melenas](https://github.com/mr-melenas) (ML Engineer, DevOps) |la velocidad para conseguir los objetivos de forma continuada |un poco mas de tiempo para haber experimentado con trnasformers mas complejos | |
+| [jdomdev](https://github.com/jdomdev) (Scrum Master, BackendDev) | La implementación de módulos del proyecto y su integración | Haber llevado un registro más detallado de los Sprints | Uso e implementación de Tranformers, despliegue documentación y Pipeline |
+
